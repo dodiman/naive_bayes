@@ -23,6 +23,53 @@
 		</div>
 	</div>
 	<div class="row">
+		<div class="col-12">
+			<div class="card card-success">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Hasil Bakat Olahraga</h3>
+				</div>
+				
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 150px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Hasil Bakat Lari</th>
+
+								<th>Hasil Bakat Voli</th>
+
+								<th>Hasil Bakat Renang</th>
+
+								<th>Hasil Bakat Bulu Tangkis</th>
+
+								<th>Hasil Bakat Sepak Bola</th>
+
+								<th>Hasil Bakat Tenis Meja</th>
+
+								<th>Hasil Bakat Tolak Peluru</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{{ prediksi_lari }}</td>
+								<td>{{ prediksi_voli }}</td>
+								<td>{{ prediksi_renang }}</td>
+								<td>{{ prediksi_bulu_tangkis }}</td>
+								<td>{{ prediksi_sepak_bola }}</td>
+								<td>{{ prediksi_tenis_meja }}</td>
+								<td>{{ prediksi_tolak_peluru }}</td>
+								
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+	<div class="row">
 		<div class="card">
               <div class="card-header p-2">
                 <ul class="nav nav-pills">
@@ -115,7 +162,7 @@
 						<tbody>
 							{% for index, value in data_training_voli.iterrows %}
 							<tr>
-								<td>{{ index }}</td>
+								<td>{{ value.index }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -146,6 +193,61 @@
 				</div>
 				<!-- /.card-body -->
 			</div>
+
+			<!-- ini untuk data testing -->
+			<div class="card card-secondary">
+				<div class="card-header">
+					<h3 class="card-title">Data Testing Voli</h3>
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 500px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Nomor</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi Badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik Voli</th>
+								<th>Teknik Dasar Voli</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in data_testing_voli.iterrows %}
+							<tr>
+								<td>{{ value.index }}</td>
+								<td>
+									{% if value.jenis_kelamin == 1 %} 
+										Laki - Laki
+									{% else %}
+										Perempuan 
+									{% endif %}
+								 </td>
+								<td>
+									{% if value.tinggi_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								<td>
+									{% if value.berat_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								
+							</td>
+								<td>{{ value.kemampuan_fisik_voli }}</td>
+								<td>{{ value.teknik_dasar_voli }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+
                   </div>
                   <!-- /.tab-pane -->
 
@@ -440,54 +542,28 @@
 	</div>
 	
 	
+	
 	<div class="row">
 		<div class="col-12">
-			<div class="card card-success">
+			<div class="card card-danger">
 				<div class="card-header">
-					<h3 class="card-title">Tabel Hasil Bakat Olahraga</h3>
+					<h3 class="card-title">Tabel Hasil Pengujian Data Prediksi dan Data Aktual</h3>
 				</div>
 				
 				<!-- /.card-header -->
 				<div class="card-body table-responsive p-0" style="height: 150px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Hasil Bakat Lari</th>
-
-								<th>Hasil Bakat Voli</th>
-
-								<th>Hasil Bakat Renang</th>
-
-								<th>Hasil Bakat Bulu Tangkis</th>
-
-								<th>Hasil Bakat Sepak Bola</th>
-
-								<th>Hasil Bakat Tenis Meja</th>
-
-								<th>Hasil Bakat Tolak Peluru</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{ prediksi_lari }}</td>
-								<td>{{ prediksi_voli }}</td>
-								<td>{{ prediksi_renang }}</td>
-								<td>{{ prediksi_bulu_tangkis }}</td>
-								<td>{{ prediksi_sepak_bola }}</td>
-								<td>{{ prediksi_tenis_meja }}</td>
-								<td>{{ prediksi_tolak_peluru }}</td>
-								
-							</tr>
-						</tbody>
-					</table>
+					<p>
+						<h5>Precision: {{ precision_voli }} %</h5>  <br />
+						<h5>Recall: {{ recall_voli }} %</h5>  <br />
+						<h5>Accuracy: {{ akurasi_voli }} %</h5> 
+						
+					</p>
 				</div>
 				<!-- /.card-body -->
 			</div>
 			<!-- /.card -->
 		</div>
 	</div>
-	
 
 </div>
 {% endblock %}

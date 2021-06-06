@@ -179,11 +179,20 @@ def dashboard(request):
 	labeling = konvers(csv)
 	data_training_lari = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_lari', 'teknik_dasar_lari', 'hasil_bakat_lari']]
 	data_training_voli = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_voli', 'teknik_dasar_voli', 'hasil_bakat_voli']]
+	
+
+	data_testing_voli = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_voli', 'teknik_dasar_voli', 'hasil_bakat_voli']]
+	
+
 	data_training_renang = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_renang', 'teknik_dasar_renang', 'hasil_bakat_renang']]
 	data_training_bulu_tangkis = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_bulu_tangkis', 'teknik_dasar_bulu_tangkis', 'hasil_bakat_bulu_tangkis']]
 	data_training_sepak_bola = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_sepak_bola', 'teknik_dasar_sepak_bola', 'hasil_bakat_sepak_bola']]
 	data_training_tenis_meja = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_tenis_meja', 'teknik_dasar_tenis_meja', 'hasil_bakat_tenis_meja']]
 	data_training_tolak_peluru = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_tolak_peluru', 'teknik_dasar_tolak_peluru', 'hasil_bakat_tolak_peluru']]
+
+
+	# data testing
+	# data_training_voli = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_voli', 'teknik_dasar_voli', 'hasil_bakat_voli']]
 
 	'''  =========================================end pembagian data====================================== '''
 
@@ -217,7 +226,6 @@ def dashboard(request):
 	x_train_tolak_peluru, x_test_tolak_peluru, y_train_tolak_peluru, y_test_tolak_peluru = train_test_split(x_tolak_peluru,y_tolak_peluru, test_size=0.2, random_state=0)
 
 	'''  =========================================pembagian data training olahraga====================================== '''
-
 	
 	'''  =========================================algoritma naivebayes====================================== '''
 	model_lari = GaussianNB()
@@ -342,6 +350,12 @@ def dashboard(request):
 	data_training_bulu_tangkis = kirimdatatraining(data_training_bulu_tangkis, x_train_bulu_tangkis)
 	data_training_tenis_meja = kirimdatatraining(data_training_tenis_meja, x_train_tenis_meja)
 	data_training_voli = kirimdatatraining(data_training_voli, x_train_voli)
+	
+	# data testing
+	data_testing_voli = kirimdatatraining(data_testing_voli, x_test_voli)
+	# print(data_y_train_voli)
+
+	
 
 	# data_training_renang.to_csv('data_training_renang.csv')
 	# data_training_tenis_meja.to_csv('data_training_tenis_meja.csv')
@@ -349,7 +363,21 @@ def dashboard(request):
 	# data_training_bulu_tangkis.to_csv('data_training_bulu_tangkis.csv')
 	# data_training_tolak_peluru.to_csv('data_training_tolak_peluru.csv')
 	# data_training_sepak_bola.to_csv('data_training_sepak_bola.csv')
-	
+
+	# pengujian
+	dataku = y_test_voli.values
+	data_mau_prediksi = dataku.reshape(-1,1)
+	# print(dataku.reshape(-1,1).ndim)
+
+	data_aktual_voli = y_test_voli                                         # data yang sebenarnya
+	data_hasil_prediksi_voli = model_voli.predict(data_mau_prediksi)		# data yang di prediksi dari data yang sebenarnya
+
+
+	precision_voli = metrics.precision_score(data_aktual_voli, data_hasil_prediksi_voli, average='weighted')    # prcesion : (y_true, y_pred)
+	recall_voli = metrics.recall_score(data_aktual_voli, data_hasil_prediksi_voli, average='weighted')
+	akurasi_voli = metrics.accuracy_score(data_aktual_voli, data_hasil_prediksi_voli)
+
+
 
 	context = {
 		'form' : form,
@@ -366,6 +394,18 @@ def dashboard(request):
 		'prediksi_tolak_peluru': prediksi_tolak_peluru[0],
 		'data_training_lari': data_training_lari,
 		'data_training_voli': data_training_voli,
+		
+
+		'data_testing_voli': data_testing_voli,
+
+		'precision_voli': int(precision_voli * 100),
+		'recall_voli': int(recall_voli * 100),
+		'akurasi_voli': int(akurasi_voli * 100),
+
+
+
+
+
 		'data_training_renang': data_training_renang,
 		'data_training_sepak_bola': data_training_sepak_bola,
 		'data_training_tenis_meja': data_training_tenis_meja,
