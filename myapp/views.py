@@ -351,9 +351,16 @@ def dashboard(request):
 	data_training_tenis_meja = kirimdatatraining(data_training_tenis_meja, x_train_tenis_meja)
 	data_training_voli = kirimdatatraining(data_training_voli, x_train_voli)
 	
+	
+
 	# data testing
 	data_testing_voli = kirimdatatraining(data_testing_voli, x_test_voli)
-	# print(data_y_train_voli)
+	data_testing_lari = kirimdatatraining(data_training_lari, x_test_lari)
+	data_testing_renang = kirimdatatraining(data_training_renang, x_test_renang)
+	data_testing_sepak_bola = kirimdatatraining(data_training_sepak_bola, x_test_sepak_bola)
+	data_testing_tenis_meja = kirimdatatraining(data_training_tenis_meja, x_test_tenis_meja)
+	data_testing_bulu_tangkis = kirimdatatraining(data_training_bulu_tangkis, x_test_bulu_tangkis)
+	data_testing_tolak_peluru = kirimdatatraining(data_training_tolak_peluru, x_test_tolak_peluru)
 
 	
 
@@ -365,17 +372,48 @@ def dashboard(request):
 	# data_training_sepak_bola.to_csv('data_training_sepak_bola.csv')
 
 	# pengujian
-	dataku = y_test_voli.values
-	data_mau_prediksi = dataku.reshape(-1,1)
-	# print(dataku.reshape(-1,1).ndim)
 
-	data_aktual_voli = y_test_voli                                         # data yang sebenarnya
-	data_hasil_prediksi_voli = model_voli.predict(data_mau_prediksi)		# data yang di prediksi dari data yang sebenarnya
+	def lakukan_uji(data_aktual, modelnya):
+		dataku = data_aktual.values
+		data_mau_prediksi = dataku.reshape(-1,1)
+		data_aktual = data_aktual                                         # data yang sebenarnya
+		data_hasil_prediksi = modelnya.predict(data_mau_prediksi)		# data yang di prediksi dari data yang sebenarnya
 
 
-	precision_voli = metrics.precision_score(data_aktual_voli, data_hasil_prediksi_voli, average='weighted')    # prcesion : (y_true, y_pred)
-	recall_voli = metrics.recall_score(data_aktual_voli, data_hasil_prediksi_voli, average='weighted')
-	akurasi_voli = metrics.accuracy_score(data_aktual_voli, data_hasil_prediksi_voli)
+		precision = metrics.precision_score(data_aktual, data_hasil_prediksi, average='weighted')    # prcesion : (y_true, y_pred)
+		recall = metrics.recall_score(data_aktual, data_hasil_prediksi, average='weighted')
+		akurasi = metrics.accuracy_score(data_aktual, data_hasil_prediksi)
+		hasilnya = {
+			'precision': int(precision * 100),
+			'recall': int(recall * 100),
+			'akurasi': int(akurasi * 100)
+		}
+		# df = pd.DataFrame(hasilnya)
+
+		return hasilnya
+
+	hasil_uji_lari = lakukan_uji(y_test_lari, model_lari)
+	hasil_uji_renang = lakukan_uji(y_test_renang, model_renang)
+	hasil_uji_sepak_bola = lakukan_uji(y_test_sepak_bola, model_sepak_bola)
+	hasil_uji_tolak_peluru = lakukan_uji(y_test_tolak_peluru, model_tolak_peluru)
+	hasil_uji_tenis_meja = lakukan_uji(y_test_tenis_meja, model_tenis_meja)
+	hasil_uji_bulu_tangkis = lakukan_uji(y_test_bulu_tangkis, model_bulu_tangkis)
+	hasil_uji_voli = lakukan_uji(y_test_voli, model_voli)
+
+	# print(hasil_uji_voli['precision'])
+
+	# dataku = y_test_voli.values
+	# data_mau_prediksi = dataku.reshape(-1,1)
+	# # print(dataku.reshape(-1,1).ndim)
+
+	# data_aktual_voli = y_test_voli                                         # data yang sebenarnya
+	# data_hasil_prediksi_voli = model_voli.predict(data_mau_prediksi)		# data yang di prediksi dari data yang sebenarnya
+
+
+	# precision_voli = metrics.precision_score(data_aktual_voli, data_hasil_prediksi_voli, average='weighted')    # prcesion : (y_true, y_pred)
+	# recall_voli = metrics.recall_score(data_aktual_voli, data_hasil_prediksi_voli, average='weighted')
+	# akurasi_voli = metrics.accuracy_score(data_aktual_voli, data_hasil_prediksi_voli)
+
 
 
 
@@ -397,11 +435,25 @@ def dashboard(request):
 		
 
 		'data_testing_voli': data_testing_voli,
+		'data_testing_tolak_peluru': data_testing_tolak_peluru,
+		'data_testing_lari': data_testing_lari,
+		'data_testing_renang': data_testing_renang,
+		'data_testing_sepak_bola': data_testing_sepak_bola,
+		'data_testing_tenis_meja': data_testing_tenis_meja,
+		'data_testing_bulu_tangkis': data_testing_bulu_tangkis,
 
-		'precision_voli': int(precision_voli * 100),
-		'recall_voli': int(recall_voli * 100),
-		'akurasi_voli': int(akurasi_voli * 100),
+		# 'precision_voli': int(precision_voli * 100),
+		# 'recall_voli': int(recall_voli * 100),
+		# 'akurasi_voli': int(akurasi_voli * 100),
 
+
+		'hasil_uji_voli': hasil_uji_voli,
+		'hasil_uji_tenis_meja': hasil_uji_tenis_meja,
+		'hasil_uji_lari': hasil_uji_lari,
+		'hasil_uji_tolak_peluru': hasil_uji_tolak_peluru,
+		'hasil_uji_renang': hasil_uji_renang,
+		'hasil_uji_bulu_tangkis': hasil_uji_bulu_tangkis,
+		'hasil_uji_sepak_bola': hasil_uji_sepak_bola,
 
 
 
