@@ -1,0 +1,249 @@
+{% extends 'master.html' %}
+
+{% block body %}
+<div class="container-fluid">
+	
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Training</h3>
+
+					
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 300px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Nama Siswa</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi Badan</th>
+								<th>Berat Badan</th>
+
+								<th>Kemampuan Fisik Lari</th>
+								<th>Teknik Dasar Lari</th>
+								<th>Hasil Bakat Lari</th>
+
+								<th>Kemampuan Fisik Voli</th>
+								<th>Teknik Dasar Voli</th>
+								<th>Hasil Bakat Voli</th>
+
+								<th>Kemampuan Fisik Renang</th>
+								<th>Teknik Dasar Renang</th>
+								<th>Hasil Bakat Renang</th>
+
+								<th>Kemampuan Fisik Bulu Tangkis</th>
+								<th>Teknik Dasar Bulu Tangkis</th>
+								<th>Hasil Bakat Bulu Tangkis</th>
+
+								<th>Kemampuan Fisik Sepak Bola</th>
+								<th>Teknik Dasar Sepak Bola</th>
+								<th>Hasil Bakat Sepak Bola</th>
+
+								<th>Kemampuan Fisik Tenis Meja</th>
+								<th>Teknik Dasar Tenis Meja</th>
+								<th>Hasil Bakat Tenis Meja</th>
+
+								<th>Kemampuan Fisik Tolak Peluru</th>
+								<th>Teknik Dasar Tolak Peluru</th>
+								<th>Hasil Bakat Tolak Peluru</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in xy_train.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>{{ value.jenis_kelamin }}</td>
+								<td>{{ value.tinggi_badan }}</td>
+								<td>{{ value.berat_badan }}</td>
+								<td>{{ value.kemampuan_fisik }}</td>
+								<td>{{ value.teknik_dasar }}</td>
+								<td>{{ value.hasil_bakat }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Training</h3>
+
+					
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 300px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Index</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik</th>
+								<th>Teknik Dasar</th>
+								<th>Hasil Bakat</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in idealnya.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>{{ value.jenis_kelamin }}</td>
+								<td>{{ value.tinggi_badan }}</td>
+								<td>{{ value.berat_badan }}</td>
+								<td>{{ value.kemampuan_fisik }}</td>
+								<td>{{ value.teknik_dasar }}</td>
+								<td>{{ value.hasil_bakat }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Preprossessing</h3>
+
+					
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 300px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik</th>
+								<th>Teknik Dasar</th>
+								<th>Hasil Bakat</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in xy_train_.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>{{ value.jenis_kelamin }}</td>
+								<td>{{ value.tinggi_badan }}</td>
+								<td>{{ value.berat_badan }}</td>
+								<td>{{ value.kemampuan_fisik }}</td>
+								<td>{{ value.teknik_dasar }}</td>
+								<td>{{ value.hasil_bakat }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+	<div class="row">
+		<!-- <h2>form</h2> -->
+		<div class="col-6">
+			<div class="card card-primary">
+				<div class="card-header">
+					<h3 class="card-title">Naive Bayes</h3>
+				</div>
+				<div class="card-body">
+					
+					<form class="form" method="post">
+						{% csrf_token %}
+						{{ form.as_p }}
+						<button type="submit">Simpan</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Test</h3>
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 100px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik</th>
+								<th>Teknik Dasar</th>
+								<th>Hasil Bakat</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in test_.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>{{ value.jenis_kelamin }}</td>
+								<td>{{ value.tinggi_badan }}</td>
+								<td>{{ value.berat_badan }}</td>
+								<td>{{ value.kemampuan_fisik }}</td>
+								<td>{{ value.teknik_dasar }}</td>
+								<td>????</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-6">
+			
+			<div class="card card-success">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Hasil</h3>
+				</div>		
+				<div class="card-body">
+					<p>
+						{{ request.POST.nim }}
+					</p>
+
+					<h2>hasil prediksi : 
+
+						{% for value in prediksi_post %} 
+
+						
+						{% if value == 0 %}
+							TIDAK BERBAKAT
+						{% endif %}
+
+						{% if value == 1 %}
+							BERBAKAT
+						{% endif %}
+						
+					{% endfor %}</h2>
+
+				</div>	
+			</div> 
+		</div>
+	</div>
+
+</div>
+{% endblock %}

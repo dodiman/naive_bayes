@@ -1,0 +1,77 @@
+{% load static %}
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a href="#" class="brand-link">
+    <img src="{% static 'adminlte/dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+    style="opacity: .8">
+    <span class="brand-text font-weight-light">NAIVE BAYES</span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
+        <img src="{% static 'adminlte/dist/img/avatar04.png' %}" class="img-circle elevation-2" alt="User Image">
+      </div>
+      <div class="info">
+        <a href="#" class="d-block">{% if user.is_authenticated %} {{ user.username }} {% else %} Belum Login {% endif %}</a>
+      </div>
+    </div>
+
+    <!-- DESKRIPSI UNTUK KELAS AKTIF  -->
+    {% url 'dashboard' as dashboard %}
+    {% url 'datas' as datas %}
+    {% url 'pengujian' as pengujian %}
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          	<!-- Add icons to the links using the .nav-icon class
+             with font-awesome or any other icon font library -->
+             <li class="nav-header">Menu</li>
+             <li class="nav-item">
+               <a href="{% url 'dashboard' %}" class="nav-link 
+               {% if request.path == dashboard %} 
+               active
+               {% endif %}
+
+               ">
+                 <i class="nav-icon fas fa-home"></i>
+                 <p>
+                   Home
+                 </p>
+               </a>
+             </li>
+
+             <li class="nav-item">
+               <a href="{% url 'datas' %}" class="nav-link
+                {% if request.path == datas %} 
+               active
+               {% endif %}
+               ">
+                 <i class="nav-icon fas fa-database"></i>
+                 <p>
+                  Data
+                 </p>
+               </a>
+             </li>
+
+             <li class="nav-item">
+               <a href="{% url 'pengujian' %}" class="nav-link
+                {% if request.path == pengujian %} 
+               active
+               {% endif %}
+               ">
+                 <i class="nav-icon fas fa-database"></i>
+                 <p>
+                  Pengujian
+                 </p>
+               </a>
+             </li>
+           </ul>
+         </nav>
+         <!-- /.sidebar-menu -->
+       </div>
+       <!-- /.sidebar -->
+     </aside>

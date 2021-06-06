@@ -1,0 +1,189 @@
+{% extends 'master.html' %}
+
+{% block body %}
+<div class="container-fluid">
+	
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Training</h3>
+
+					
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 300px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Jenis Kelamin</th>
+								<th>Pernah Mengulang</th>
+								<th>Pernah Cuti</th>
+								<th>Sambil Bekerja</th>
+								<th>IPK</th>
+								<th>IPK Semester 1</th>
+								<th>Asli Orang Papua</th>
+								<th>Prediksi Kelulusan</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in gabung.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>{{ value.jk }}</td>
+								<td>{{ value.p_mengulang }}</td>
+								<td>{{ value.p_cuti }}</td>
+								<td>{{ value.sam_bekerja }}</td>
+								<td>{{ value.ipk }}</td>
+								<td>{{ value.ipk1 }}</td>
+								<td>{{ value.a_papua }}</td>
+								<td>{{ value.prediksi }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Preprossessing</h3>
+
+					
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 300px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Jenis Kelamin</th>
+								<th>Pernah Mengulang</th>
+								<th>Pernah Cuti</th>
+								<th>Sambil Bekerja</th>
+								<th>IPK</th>
+								<th>IPK Semester 1</th>
+								<th>Asli Orang Papua</th>
+								<th>Prediksi Kelulusan</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in x_train_y_train.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>{{ value.jk }}</td>
+								<td>{{ value.p_mengulang }}</td>
+								<td>{{ value.p_cuti }}</td>
+								<td>{{ value.sam_bekerja }}</td>
+								<td>{{ value.ipk }}</td>
+								<td>{{ value.ipk1 }}</td>
+								<td>{{ value.a_papua }}</td>
+								<td>{{ value.prediksi }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+	<div class="row">
+		<!-- <h2>form</h2> -->
+		<div class="col-6">
+			<div class="card card-primary">
+				<div class="card-header">
+					<h3 class="card-title">Naive Bayes</h3>
+				</div>
+				<div class="card-body">
+					
+					<form class="form" method="post">
+						{% csrf_token %}
+						{{ form.as_p }}
+						<button type="submit">Simpan</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Test</h3>
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 100px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Jenis Kelamin</th>
+								<th>Pernah Mengulang</th>
+								<th>Pernah Cuti</th>
+								<th>Sambil Bekerja</th>
+								<th>IPK</th>
+								<th>IPK Semester 1</th>
+								<th>Asli Orang Papua</th>
+								<th>Prediksi Kelulusan</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in test.iterrows %}
+							<tr>
+								<td>{{ value.jk }}</td>
+								<td>{{ value.p_mengulang }}</td>
+								<td>{{ value.p_cuti }}</td>
+								<td>{{ value.sam_bekerja }}</td>
+								<td>{{ value.ipk }}</td>
+								<td>{{ value.ipk1 }}</td>
+								<td>{{ value.a_papua }}</td>
+								<td>???</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-6">
+			
+			<div class="card card-success">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Hasil</h3>
+				</div>		
+				<div class="card-body">
+					<p>
+						{{ request.POST.nim }}
+					</p>
+
+					<h2>hasil prediksi : {% for value in prediksi_post %} 
+
+						{{ value }} (
+						{% if value == 't' %}
+						Terlambat
+						{% endif %}
+
+						{% if value == 'tw' %}
+						Tepat Waktu
+						{% endif %}
+						)
+					{% endfor %}</h2>
+
+				</div>	
+			</div> 
+		</div>
+	</div>
+
+</div>
+{% endblock %}

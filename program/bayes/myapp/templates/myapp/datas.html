@@ -1,0 +1,124 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block body %}
+<div class="container-fluid">
+	{% if not db %}
+	<div class="row">
+		<div class="col-6">
+			<div class="card card-warning">
+				<div class="card-header">
+					<h3 class="card-title">Perhatian</h3>
+
+					
+				</div>
+				<div class="card-body">
+					<p>Harap mengupload data terlebih dahulu (karna data masih kosong)</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% else %}
+	<div class="row">
+		<div class="col-6">
+			<div class="card card-warning">
+				<div class="card-header">
+					<h3 class="card-title">Reset Data</h3>
+
+					
+				</div>
+				<div class="card-body">
+					<p>Jika ingin mereset atau menghapus semua data, klik <a href="{% url 'reset_data' %}" onclick="return confirm('apakah anda yakin?')">disini</a> </p>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	<div class="row">
+		<div class="col-6">
+			<div class="card card-primary">
+				<div class="card-header">
+					<h3 class="card-title">INPUT DATA <p>pesan : {{ pesan }}</p></h3>
+
+					
+				</div>
+				<div class="card-body table-responsive p-0" style="height: 300px;">
+
+					<form method="post" enctype="multipart/form-data">
+						<div class="card-body">
+							{% csrf_token %}
+							<div class="form-group">
+								<label for="exampleInputEmail1">Upload file</label>
+								<input type="file" name="importData" class="form-control" required>
+							</div>
+							<div class="form-group">
+
+								<label for="exampleInputEmail1">Pilih Format</label>
+								<select name="file-format" class="form-control my-3">
+									<option selected="">..</option>
+									<option>CSV</option>
+									<option>JSON</option>
+								</select>
+							</div>
+						</div>
+						<div class="card-footer">
+							<button class="btn btn-primary" type="submit">Import</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<hr>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Data</h3>
+
+					
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 300px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Jenis Kelamin</th>
+								<th>Pernah Mengulang</th>
+								<th>Pernah Cuti</th>
+								<th>Sambil Bekerja</th>
+								<th>IPK</th>
+								<th>IPK Semester 1</th>
+								<th>Asli Orang Papua</th>
+								<th>Prediksi</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for value in db %}
+							<tr>
+								<td>{{ value.id }}</td>
+								<td>{{ value.jk }}</td>
+								<td>{{ value.p_mengulang }}</td>
+								<td>{{ value.p_cuti }}</td>
+								<td>{{ value.sam_bekerja }}</td>
+								<td>{{ value.ipk }}</td>
+								<td>{{ value.ipk_sm1 }}</td>
+								<td>{{ value.a_papua }}</td>
+								<td>{{ value.prediksi }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block script %} 
+<script src="{% static 'adminlte/plugins/bs-custom-file-input/bs-custom-file-input.min.js' %}"></script>
+{% endblock %}

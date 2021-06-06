@@ -1,0 +1,110 @@
+{% extends 'master.html' %}
+{% load static %}
+{% block body %}
+<div class="container-fluid">
+
+	<div class="row">
+		<div class="col-12">
+			<div class="card card-primary">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Testing (data true)</h3>
+
+					
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 300px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Index</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik</th>
+								<th>Teknik Dasar</th>
+								<th>Hasil Bakat</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in xy_test.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>{{ value.jenis_kelamin }}</td>
+								<td>{{ value.tinggi_badan }}</td>
+								<td>{{ value.berat_badan }}</td>
+								<td>{{ value.kemampuan_fisik }}</td>
+								<td>{{ value.teknik_dasar }}</td>
+								<td>{{ value.hasil_bakat }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<div class="card card-primary">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Prediksi (data prediksi)</h3>
+
+					
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 300px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Index</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik</th>
+								<th>Teknik Dasar</th>
+								<th>Hasil Bakat</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in xy_prediksi.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>{{ value.jenis_kelamin }}</td>
+								<td>{{ value.tinggi_badan }}</td>
+								<td>{{ value.berat_badan }}</td>
+								<td>{{ value.kemampuan_fisik }}</td>
+								<td>{{ value.teknik_dasar }}</td>
+								<td>{{ value.hasil_bakat }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>	
+	
+	
+	<div class="row">
+		<div class="col-12">
+			<div class="card card-primary">
+				<div class="card-header">
+					<h3 class="card-title">Evaluasi</h3>
+				</div>
+				<div class="card-body">
+					<h2>akurasi : {{ akurasi }}</h2>
+					<h2>precision : {{ precision }}</h2>
+					<h2>recall : {{ recall }}</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block script %}
+{% endblock %}

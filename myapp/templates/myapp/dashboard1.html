@@ -1,0 +1,493 @@
+{% extends 'master.html' %}
+
+{% block body %}
+<div class="container-fluid">
+	
+	
+	<div class="row">
+		<!-- <h2>form</h2> -->
+		<div class="col-6">
+			<div class="card card-primary">
+				<div class="card-header">
+					<h3 class="card-title">Naive Bayes</h3>
+				</div>
+				<div class="card-body">
+					
+					<form class="form" method="post">
+						{% csrf_token %}
+						{{ form.as_p }}
+						<button type="submit">Simpan</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="card">
+              <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Data Training Lari</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#voli" data-toggle="tab">Data Training Voli</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#renang" data-toggle="tab">Data Training Renang</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#bulutangkis" data-toggle="tab">Data Training Bulu Tangkis</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#sepakbola" data-toggle="tab">Data Training Sepak Bola</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#tenismeja" data-toggle="tab">Data Training Tenis Meja</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#tolakpeluru" data-toggle="tab">Data Training Tolak Peluru</a></li>
+                </ul>
+              </div><!-- /.card-header -->
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="active tab-pane" id="activity">
+                     <div class="card card-warning">
+				<div class="card-header">
+					<h3 class="card-title">Data Training Lari</h3>
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 500px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Nomor</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi Badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik Lari</th>
+								<th>Teknik Dasar Lari</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in data_training_lari.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>
+									{% if value.jenis_kelamin == 1 %} 
+										Laki - Laki
+									{% else %}
+										Perempuan 
+									{% endif %}
+								 </td>
+								<td>
+									{% if value.tinggi_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								<td>
+									{% if value.berat_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								
+							</td>
+								<td>{{ value.kemampuan_fisik_lari }}</td>
+								<td>{{ value.teknik_dasar_lari }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+                  </div>
+                  <!-- /.tab-pane -->
+                  <div class="tab-pane" id="voli">
+                    <!-- data training lari disini -->
+                    <div class="card card-warning">
+				<div class="card-header">
+					<h3 class="card-title">Data Training Voli</h3>
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 500px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Nomor</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi Badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik Voli</th>
+								<th>Teknik Dasar Voli</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in data_training_voli.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>
+									{% if value.jenis_kelamin == 1 %} 
+										Laki - Laki
+									{% else %}
+										Perempuan 
+									{% endif %}
+								 </td>
+								<td>
+									{% if value.tinggi_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								<td>
+									{% if value.berat_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								
+							</td>
+								<td>{{ value.kemampuan_fisik_voli }}</td>
+								<td>{{ value.teknik_dasar_voli }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+                  </div>
+                  <!-- /.tab-pane -->
+
+                  <div class="tab-pane" id="renang">
+                     <!-- data training lari disini -->
+                    <div class="card card-warning">
+				<div class="card-header">
+					<h3 class="card-title">Data Training Renang</h3>
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 500px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Nomor</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi Badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik Renang</th>
+								<th>Teknik Dasar Renang</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in data_training_renang.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>
+									{% if value.jenis_kelamin == 1 %} 
+										Laki - Laki
+									{% else %}
+										Perempuan 
+									{% endif %}
+								 </td>
+								<td>
+									{% if value.tinggi_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								<td>
+									{% if value.berat_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								
+							</td>
+								<td>{{ value.kemampuan_fisik_renang }}</td>
+								<td>{{ value.teknik_dasar_renang }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+                  </div>
+                  <!-- /.tab-pane -->
+
+                  <div class="tab-pane" id="bulutangkis">
+                     <!-- data training lari disini -->
+                    <div class="card card-warning">
+				<div class="card-header">
+					<h3 class="card-title">Data Training Bulu Tangkis</h3>
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 500px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Nomor</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi Badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik Bulu Tangkis</th>
+								<th>Teknik Dasar Bulu Tangkis</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in data_training_bulu_tangkis.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>
+									{% if value.jenis_kelamin == 1 %} 
+										Laki - Laki
+									{% else %}
+										Perempuan 
+									{% endif %}
+								 </td>
+								<td>
+									{% if value.tinggi_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								<td>
+									{% if value.berat_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								
+							</td>
+								<td>{{ value.kemampuan_fisik_bulu_tangkis }}</td>
+								<td>{{ value.teknik_dasar_bulu_tangkis }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+                  </div>
+                  <!-- /.tab-pane -->
+
+                  <div class="tab-pane" id="sepakbola">
+                     <!-- data training lari disini -->
+                    <div class="card card-warning">
+				<div class="card-header">
+					<h3 class="card-title">Data Training Sepak Bola</h3>
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 500px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Nomor</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi Badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik Sepak Bola</th>
+								<th>Teknik Dasar Sepak Bola</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in data_training_sepak_bola.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>
+									{% if value.jenis_kelamin == 1 %} 
+										Laki - Laki
+									{% else %}
+										Perempuan 
+									{% endif %}
+								 </td>
+								<td>
+									{% if value.tinggi_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								<td>
+									{% if value.berat_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								
+							</td>
+								<td>{{ value.kemampuan_fisik_sepak_bola }}</td>
+								<td>{{ value.teknik_dasar_sepak_bola }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+                  </div>
+                  <!-- /.tab-pane -->
+
+                  <div class="tab-pane" id="tenismeja">
+                     <!-- data training lari disini -->
+                    <div class="card card-warning">
+				<div class="card-header">
+					<h3 class="card-title">Data Training Tenis Meja</h3>
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 500px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Nomor</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi Badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik Tenis Meja</th>
+								<th>Teknik Dasar Tenis Meja</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in data_training_tenis_meja.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>
+									{% if value.jenis_kelamin == 1 %} 
+										Laki - Laki
+									{% else %}
+										Perempuan 
+									{% endif %}
+								 </td>
+								<td>
+									{% if value.tinggi_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								<td>
+									{% if value.berat_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								
+							</td>
+								<td>{{ value.kemampuan_fisik_tenis_meja }}</td>
+								<td>{{ value.teknik_dasar_tenis_meja }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+                  </div>
+                  <!-- /.tab-pane -->
+
+                  <div class="tab-pane" id="tolakpeluru">
+                     <!-- data training lari disini -->
+                    <div class="card card-warning">
+				<div class="card-header">
+					<h3 class="card-title">Data Training Tolak Peluru</h3>
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 500px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Nomor</th>
+								<th>Jenis Kelamin</th>
+								<th>Tinggi Badan</th>
+								<th>Berat Badan</th>
+								<th>Kemampuan Fisik Tolak Peluru</th>
+								<th>Teknik Dasar Tolak Peluru</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							{% for index, value in data_training_tolak_peluru.iterrows %}
+							<tr>
+								<td>{{ index }}</td>
+								<td>
+									{% if value.jenis_kelamin == 1 %} 
+										Laki - Laki
+									{% else %}
+										Perempuan 
+									{% endif %}
+								 </td>
+								<td>
+									{% if value.tinggi_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								<td>
+									{% if value.berat_badan == 1 %} 
+										Ideal
+									{% else %}
+										Tidak Ideal 
+									{% endif %}
+								
+							</td>
+								<td>{{ value.kemampuan_fisik_tolak_peluru }}</td>
+								<td>{{ value.teknik_dasar_tolak_peluru }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+                  </div>
+                  <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+              </div><!-- /.card-body -->
+            </div>
+	</div>
+	
+	
+	<div class="row">
+		<div class="col-12">
+			<div class="card card-success">
+				<div class="card-header">
+					<h3 class="card-title">Tabel Hasil Bakat Olahraga</h3>
+				</div>
+				
+				<!-- /.card-header -->
+				<div class="card-body table-responsive p-0" style="height: 150px;">
+					<table class="table table-head-fixed text-nowrap">
+						<thead>
+							<tr>
+								<th>Hasil Bakat Lari</th>
+
+								<th>Hasil Bakat Voli</th>
+
+								<th>Hasil Bakat Renang</th>
+
+								<th>Hasil Bakat Bulu Tangkis</th>
+
+								<th>Hasil Bakat Sepak Bola</th>
+
+								<th>Hasil Bakat Tenis Meja</th>
+
+								<th>Hasil Bakat Tolak Peluru</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{{ prediksi_lari }}</td>
+								<td>{{ prediksi_voli }}</td>
+								<td>{{ prediksi_renang }}</td>
+								<td>{{ prediksi_bulu_tangkis }}</td>
+								<td>{{ prediksi_sepak_bola }}</td>
+								<td>{{ prediksi_tenis_meja }}</td>
+								<td>{{ prediksi_tolak_peluru }}</td>
+								
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+	
+
+</div>
+{% endblock %}
