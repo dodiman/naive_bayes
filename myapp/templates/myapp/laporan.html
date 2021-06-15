@@ -3,72 +3,102 @@
 {% block body %}
 <div class="container-fluid">
 	
+	<div class="invoice p-3 mb-3">
+              <!-- title row -->
+              <div class="row">
+                <div class="col-12">
+                  <h4>
+                    <!-- <i class="fas fa-globe"></i> Laporan Hasil Bakat Siswa -->
+                    <!-- <small class="float-right">Date: 2/10/2014</small> -->
+                  </h4>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- info row -->
+              <div class="row invoice-info">
+                <div class="col-sm-2 invoice-col">
+                  <p>logo buton</p>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-8 invoice-col">
+                  <center><strong><p style="font-size: 20px;">PEMERINTAH KABUPATEN BUTON<p></strong></center>
+                  <center><strong><p style="font-size: 20px;">DINAS PENDIDIKAN<p></strong></center>
+                  <center><strong><p style="font-size: 20px;">SMP NEGERI 3 PASARWAJO<p></strong></center>
+                  
+                  <!-- <br /> -->
+                  
+                  <br />
+                  <center><p style="font-size: 12px;">Alamat : Jln Poros Pasarwajo Dongkala Telp. …… Kode Pos 93754</p></center>
+
+                </div>
+                
+                <!-- /.col -->
+                <div class="col-sm-2 invoice-col">
+                  <p> logo tutwuri handayani</p>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+
+
+              <!-- untuk garis pembatas -->
+              <div class="col-sm-12">
+                	<p style="border-bottom: solid;"></p>
+                </div>
+
+                <br />
+               <div class="col-sm-12">
+               		<center><h3>TABEL HASIL BAKAT SISWA</h3></center>
+               </div>
+                <br />
+
+              <!-- Table row -->
+              <div class="row">
+                <div class="col-12 table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama</th>
+                      <th>Jenis Kelamin</th>
+                      <th>Tinggi Badan</th>
+                      <th>Berat Badan</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    
+                    {% for index, value in data_testing_lari.iterrows %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td></td>
+                      <td>{% if value.jenis_kelamin == 1 %} 
+										Laki - Laki
+									{% else %}
+										Perempuan 
+									{% endif %}</td>
+                      <td>{{ value.tinggi_badan }}</td>
+                      <td>{{ value.berat_badan }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- /.row -->
+
+              
+              <!-- /.row -->
+
+              <!-- this row will not appear when printing -->
+              <div class="row no-print">
+                <div class="col-12">
+                  <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
+                  
+                </div>
+              </div>
+            </div>
 	
-	<div class="row">
-		<!-- <h2>form</h2> -->
-		<div class="col-6">
-			<div class="card card-primary">
-				<div class="card-header">
-					<h3 class="card-title">Naive Bayes</h3>
-				</div>
-				<div class="card-body">
-					
-					<form class="form" method="post">
-						{% csrf_token %}
-						{{ form.as_p }}
-						<button type="submit">Simpan</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12">
-			<div class="card card-success">
-				<div class="card-header">
-					<h3 class="card-title">Tabel Hasil Bakat Olahraga</h3>
-				</div>
-				
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 150px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Hasil Bakat Lari</th>
-
-								<th>Hasil Bakat Voli</th>
-
-								<th>Hasil Bakat Renang</th>
-
-								<th>Hasil Bakat Bulu Tangkis</th>
-
-								<th>Hasil Bakat Sepak Bola</th>
-
-								<th>Hasil Bakat Tenis Meja</th>
-
-								<th>Hasil Bakat Tolak Peluru</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{ prediksi_lari }}</td>
-								<td>{{ prediksi_voli }}</td>
-								<td>{{ prediksi_renang }}</td>
-								<td>{{ prediksi_bulu_tangkis }}</td>
-								<td>{{ prediksi_sepak_bola }}</td>
-								<td>{{ prediksi_tenis_meja }}</td>
-								<td>{{ prediksi_tolak_peluru }}</td>
-								
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-			<!-- /.card -->
-		</div>
-	</div>
 	<div class="row">
 		<div class="card">
               <div class="card-header p-2">
@@ -106,7 +136,7 @@
 						<tbody>
 							{% for index, value in data_training_lari.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -160,7 +190,7 @@
 						<tbody>
 							{% for index, value in data_testing_lari.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -220,7 +250,7 @@
 						<tbody>
 							{% for index, value in data_training_voli.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -274,7 +304,7 @@
 						<tbody>
 							{% for index, value in data_testing_voli.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -333,7 +363,7 @@
 						<tbody>
 							{% for index, value in data_training_renang.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -387,7 +417,7 @@
 						<tbody>
 							{% for index, value in data_testing_renang.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -446,7 +476,7 @@
 						<tbody>
 							{% for index, value in data_training_bulu_tangkis.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -500,7 +530,7 @@
 						<tbody>
 							{% for index, value in data_testing_bulu_tangkis.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -559,7 +589,7 @@
 						<tbody>
 							{% for index, value in data_training_sepak_bola.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -613,7 +643,7 @@
 						<tbody>
 							{% for index, value in data_testing_sepak_bola.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -672,7 +702,7 @@
 						<tbody>
 							{% for index, value in data_training_tenis_meja.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -727,7 +757,7 @@
 
 							{% for index, value in data_testing_tenis_meja.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -787,7 +817,7 @@
 						<tbody>
 							{% for index, value in data_training_tolak_peluru.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -841,7 +871,7 @@
 						<tbody>
 							{% for index, value in data_testing_tolak_peluru.iterrows %}
 							<tr>
-								<td>{{ value.index }}</td>
+								<td>{{ forloop.counter }}</td>
 								<td>
 									{% if value.jenis_kelamin == 1 %} 
 										Laki - Laki
@@ -885,33 +915,7 @@
 	
 	
 	
-	<div class="row">
-		<div class="col-12">
-			<div class="card card-danger">
-				<div class="card-header">
-					<h3 class="card-title">Tabel Hasil Pengujian Data Prediksi dan Data Aktual <button class="btn btn-info btn-xs">LIHAT LAPORAN</button></h3>
-				</div>
-				
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 150px;">
-					<p>
-						<h5>Voli: Precision: {{ hasil_uji_voli.precision }} %, Recall: {{ hasil_uji_voli.recall }} %, Akurasi: {{ hasil_uji_voli.akurasi }} %</h5>  <br />
-						<h5>tenis_meja: Precision: {{ hasil_uji_tenis_meja.precision }} %, Recall: {{ hasil_uji_tenis_meja.recall }} %, Akurasi: {{ hasil_uji_tenis_meja.akurasi }} %</h5>  <br />
-						<h5>lari: Precision: {{ hasil_uji_lari.precision }} %, Recall: {{ hasil_uji_lari.recall }} %, Akurasi: {{ hasil_uji_lari.akurasi }} %</h5>  <br />
-						<h5>tolak_peluru: Precision: {{ hasil_uji_tolak_peluru.precision }} %, Recall: {{ hasil_uji_tolak_peluru.recall }} %, Akurasi: {{ hasil_uji_tolak_peluru.akurasi }} %</h5>  <br />
-						<h5>renang: Precision: {{ hasil_uji_renang.precision }} %, Recall: {{ hasil_uji_renang.recall }} %, Akurasi: {{ hasil_uji_renang.akurasi }} %</h5>  <br />
-						<h5>bulu_tangkis: Precision: {{ hasil_uji_bulu_tangkis.precision }} %, Recall: {{ hasil_uji_bulu_tangkis.recall }} %, Akurasi: {{ hasil_uji_bulu_tangkis.akurasi }} %</h5>  <br />
-						<h5>sepak_bola: Precision: {{ hasil_uji_sepak_bola.precision }} %, Recall: {{ hasil_uji_sepak_bola.recall }} %, Akurasi: {{ hasil_uji_sepak_bola.akurasi }} %</h5>  <br />
-						
-						
-						
-					</p>
-				</div>
-				<!-- /.card-body -->
-			</div>
-			<!-- /.card -->
-		</div>
-	</div>
+	
 
 </div>
 {% endblock %}

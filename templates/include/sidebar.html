@@ -22,6 +22,7 @@
     <!-- DESKRIPSI UNTUK KELAS AKTIF  -->
     {% url 'dashboard' as dashboard %}
     {% url 'datas' as datas %}
+    {% url 'laporan' as laporan %}
    
 
     <!-- Sidebar Menu -->
@@ -56,6 +57,20 @@
                  </p>
                </a>
              </li>
+
+             <li class="nav-item">
+               <a href="{% url 'laporan' %}" class="nav-link
+                {% if request.path == laporan %} 
+               active
+               {% endif %}
+               ">
+                 <i class="nav-icon fas fa-book"></i>
+                 <p>
+                  Laporan
+                 </p>
+               </a>
+             </li>
+
 
            
            </ul>

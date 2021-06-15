@@ -949,3 +949,433 @@ def pengujian(request):
 def reset_data(request):
 	Datas.objects.all().delete()
 	return redirect('datas')
+
+
+# ini untuk halaman laporan
+def laporan(request):
+	db = Datas.objects.all()
+	if not db:
+		return redirect('datas')
+	csv = pd.DataFrame(db.values())
+	df = pd.DataFrame(db.values())
+	csv = df.copy()
+
+	labeling = csv.copy()
+	
+	# ini untuk tabel laporan
+	data_laporan = csv.copy()
+	data_laporan_tampil = data_laporan.copy()
+	data_laporan_tampil = data_laporan[['nama_siswa', 'jenis_kelamin', 'tinggi_badan', 'berat_badan']]
+	data_laporan_tampil['hasil_bakat'] = ''
+
+	print(data_laporan_tampil)
+	
+	def konvers(csv):
+		csv[['jenis_kelamin']] = np.where(csv[['jenis_kelamin']] == 'perempuan', 0, 1)
+
+		kondisi = [
+		        (csv['jenis_kelamin'] == 1) & (csv['tinggi_badan'] < 148),
+		        (csv['jenis_kelamin'] == 1) & (csv['tinggi_badan'] > 158),
+		        (csv['jenis_kelamin'] == 0) & (csv['tinggi_badan'] < 145), 
+		        (csv['jenis_kelamin'] == 0) & (csv['tinggi_badan'] > 155)
+		    ]
+
+		kondisi_berat_badan = [
+		        (csv['jenis_kelamin'] == 1) & (csv['berat_badan'] < 37),
+		        (csv['jenis_kelamin'] == 1) & (csv['berat_badan'] > 45),
+		        (csv['jenis_kelamin'] == 0) & (csv['berat_badan'] < 35), 
+		        (csv['jenis_kelamin'] == 0) & (csv['berat_badan'] > 40)
+		    ]
+
+		pilihan = [0, 0, 0, 0]
+		csv['tinggi_badan'] = np.select(kondisi, pilihan, default=1)
+		csv['berat_badan'] = np.select(kondisi_berat_badan, pilihan, default=1)
+		return csv
+
+	def konvers_test_post(csv):
+		csv[['jenis_kelamin']] = np.where(csv[['jenis_kelamin']] == 'perempuan', 0, 1)
+
+		kondisi = [
+		        (csv['jenis_kelamin'] == 1) & (csv['tinggi_badan'] < 148),
+		        (csv['jenis_kelamin'] == 1) & (csv['tinggi_badan'] > 158),
+		        (csv['jenis_kelamin'] == 0) & (csv['tinggi_badan'] < 145), 
+		        (csv['jenis_kelamin'] == 0) & (csv['tinggi_badan'] > 155)
+		    ]
+
+		kondisi_berat_badan = [
+		        (csv['jenis_kelamin'] == 1) & (csv['berat_badan'] < 37),
+		        (csv['jenis_kelamin'] == 1) & (csv['berat_badan'] > 45),
+		        (csv['jenis_kelamin'] == 0) & (csv['berat_badan'] < 35), 
+		        (csv['jenis_kelamin'] == 0) & (csv['berat_badan'] > 40)
+		    ]
+
+		pilihan = [0, 0, 0, 0]
+		csv['tinggi_badan'] = np.select(kondisi, pilihan, default=1)
+		csv['berat_badan'] = np.select(kondisi_berat_badan, pilihan, default=1)
+		return csv
+
+	def konvers_train(csv):
+	    csv.iloc[:, 0] = np.where(csv.iloc[:, 0] == 'perempuan', 0, 1)
+	    csv.iloc[:, 3:5] = np.where(csv.iloc[:, 3:5] < 80.0, 0, 1)
+
+	    kondisi = [
+	            (csv.iloc[:,0] == 1) & (csv.iloc[:,1] < 148),
+	            (csv.iloc[:,0] == 1) & (csv.iloc[:,1] > 158),
+	            (csv.iloc[:,0] == 0) & (csv.iloc[:,1] < 145), 
+	            (csv.iloc[:,0] == 0) & (csv.iloc[:,1] > 155)
+	        ]
+
+	    kondisi_berat_badan = [
+	            (csv.iloc[:,0] == 1) & (csv.iloc[:,2]< 37),
+	            (csv.iloc[:,0] == 1) & (csv.iloc[:,2]> 45),
+	            (csv.iloc[:,0] == 0) & (csv.iloc[:,2]< 35), 
+	            (csv.iloc[:,0] == 0) & (csv.iloc[:,2]> 40)
+	        ]
+
+	    pilihan = [0, 0, 0, 0]
+	    csv.iloc[:,1] = np.select(kondisi, pilihan, default=1)
+	    csv.iloc[:,2] = np.select(kondisi_berat_badan, pilihan, default=1)
+	    return csv
+
+	def konvers_target(csv):
+	    csv = np.where(csv == 'berbakat', 1, 0)
+	    return csv
+
+	def konvers_ideal(xy_train_):
+		xy_train_.iloc[:,0] = xy_train_.iloc[:,0].apply(lambda x: 'Perempuan' if x == 0 else 'Laki - Laki')
+		xy_train_.iloc[:, 1:-1] = xy_train_.iloc[:, 1:-1].applymap(lambda x: 'ideal' if x == 1 else 'tidak ideal')
+		return xy_train_
+	
+	def konvers_ideal_post(xy_train_):
+		xy_train_.iloc[:,0] = xy_train_.iloc[:,0].apply(lambda x: 'Perempuan' if x == 0 else 'Laki - Laki')
+		xy_train_.iloc[:, 1:] = xy_train_.iloc[:, 1:].applymap(lambda x: 'ideal' if x == 1 else 'tidak ideal')
+		return xy_train_
+
+	# gabung data
+	def gabung(x_train, y_train):
+	    xy_train = x_train.copy()
+	    xy_train['hasil_bakat'] = y_train
+	    return xy_train
+
+	# konversi inputan (berat badan dan tinggi badan) menjadi 0 atau 1
+	def konversi_berat_badan_tinggi_badan_inputan(csv):
+		kondisi = [
+		        (csv.iloc[:,0] == 1) & (csv.iloc[:,1] < 148),
+		        (csv.iloc[:,0] == 1) & (csv.iloc[:,1] > 158),
+		        (csv.iloc[:,0] == 0) & (csv.iloc[:,1] < 145), 
+		        (csv.iloc[:,0] == 0) & (csv.iloc[:,1] > 155)
+		    ]
+
+		kondisi_berat_badan = [
+		        (csv.iloc[:,0] == 1) & (csv.iloc[:,2]< 37),
+		        (csv.iloc[:,0] == 1) & (csv.iloc[:,2]> 45),
+		        (csv.iloc[:,0] == 0) & (csv.iloc[:,2]< 35), 
+		        (csv.iloc[:,0] == 0) & (csv.iloc[:,2]> 40)
+		    ]
+
+		pilihan = [0, 0, 0, 0]
+		csv[['tinggi_badan']] = np.select(kondisi, pilihan, default=1)
+		csv[['berat_badan']] = np.select(kondisi_berat_badan, pilihan, default=1)
+		# csv.iloc[:,1] = np.select(kondisi, pilihan, default=1)
+		# csv.iloc[:,2] = np.select(kondisi_berat_badan, pilihan, default=1)
+		return csv
+	
+	'''  ========================================= pembagian data====================================== '''
+	labeling = konvers(csv)
+	data_training_lari = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_lari', 'teknik_dasar_lari', 'hasil_bakat_lari']]
+	data_training_voli = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_voli', 'teknik_dasar_voli', 'hasil_bakat_voli']]
+	
+
+	data_testing_voli = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_voli', 'teknik_dasar_voli', 'hasil_bakat_voli']]
+	
+
+	data_training_renang = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_renang', 'teknik_dasar_renang', 'hasil_bakat_renang']]
+	data_training_bulu_tangkis = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_bulu_tangkis', 'teknik_dasar_bulu_tangkis', 'hasil_bakat_bulu_tangkis']]
+	data_training_sepak_bola = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_sepak_bola', 'teknik_dasar_sepak_bola', 'hasil_bakat_sepak_bola']]
+	data_training_tenis_meja = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_tenis_meja', 'teknik_dasar_tenis_meja', 'hasil_bakat_tenis_meja']]
+	data_training_tolak_peluru = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_tolak_peluru', 'teknik_dasar_tolak_peluru', 'hasil_bakat_tolak_peluru']]
+
+
+	# data testing
+	# data_training_voli = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_voli', 'teknik_dasar_voli', 'hasil_bakat_voli']]
+
+	'''  =========================================end pembagian data====================================== '''
+
+	'''  =========================================pembagian data training olahraga====================================== '''
+	y_lari = csv['hasil_bakat_lari']
+	x_lari = csv[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_lari','teknik_dasar_lari']]
+	x_train_lari, x_test_lari, y_train_lari, y_test_lari = train_test_split(x_lari,y_lari, test_size=0.2, random_state=0)
+
+	y_voli = csv['hasil_bakat_voli']
+	x_voli = csv[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_voli','teknik_dasar_voli']]
+	x_train_voli, x_test_voli, y_train_voli, y_test_voli = train_test_split(x_voli,y_voli, test_size=0.2, random_state=0)
+
+	y_renang = csv['hasil_bakat_renang']
+	x_renang = csv[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_renang','teknik_dasar_renang']]
+	x_train_renang, x_test_renang, y_train_renang, y_test_renang = train_test_split(x_renang,y_renang, test_size=0.2, random_state=0)
+
+	y_bulu_tangkis = csv['hasil_bakat_bulu_tangkis']
+	x_bulu_tangkis = csv[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_bulu_tangkis','teknik_dasar_bulu_tangkis']]
+	x_train_bulu_tangkis, x_test_bulu_tangkis, y_train_bulu_tangkis, y_test_bulu_tangkis = train_test_split(x_bulu_tangkis,y_bulu_tangkis, test_size=0.2, random_state=0)
+
+	y_sepak_bola = csv['hasil_bakat_sepak_bola']
+	x_sepak_bola = csv[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_sepak_bola','teknik_dasar_sepak_bola']]
+	x_train_sepak_bola, x_test_sepak_bola, y_train_sepak_bola, y_test_sepak_bola = train_test_split(x_sepak_bola,y_sepak_bola, test_size=0.2, random_state=0)
+
+	y_tenis_meja = csv['hasil_bakat_tenis_meja']
+	x_tenis_meja = csv[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_tenis_meja','teknik_dasar_tenis_meja']]
+	x_train_tenis_meja, x_test_tenis_meja, y_train_tenis_meja, y_test_tenis_meja = train_test_split(x_tenis_meja,y_tenis_meja, test_size=0.2, random_state=0)
+
+	y_tolak_peluru = csv['hasil_bakat_tolak_peluru']
+	x_tolak_peluru = csv[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_tolak_peluru','teknik_dasar_tolak_peluru']]
+	x_train_tolak_peluru, x_test_tolak_peluru, y_train_tolak_peluru, y_test_tolak_peluru = train_test_split(x_tolak_peluru,y_tolak_peluru, test_size=0.2, random_state=0)
+
+	'''  =========================================pembagian data training olahraga====================================== '''
+	
+	'''  =========================================algoritma naivebayes====================================== '''
+	model_lari = GaussianNB()
+	model_lari.fit(x_train_lari, y_train_lari)
+
+	model_voli = GaussianNB()
+	model_voli.fit(x_train_voli, y_train_voli)
+
+	model_renang = GaussianNB()
+	model_renang.fit(x_train_renang, y_train_renang)
+
+	model_bulu_tangkis = GaussianNB()
+	model_bulu_tangkis.fit(x_train_bulu_tangkis, y_train_bulu_tangkis)
+
+	model_sepak_bola = GaussianNB()
+	model_sepak_bola.fit(x_train_sepak_bola, y_train_sepak_bola)
+
+	model_tenis_meja = GaussianNB()
+	model_tenis_meja.fit(x_train_tenis_meja, y_train_tenis_meja)
+
+	model_tolak_peluru = GaussianNB()
+	model_tolak_peluru.fit(x_train_tolak_peluru, y_train_tolak_peluru)
+
+	'''  =========================================end algoritma naivebayes====================================== '''
+	
+
+	prediksi_lari = [0]
+	prediksi_voli = [0]
+	prediksi_renang = [0]
+	prediksi_bulu_tangkis = [0]
+	prediksi_sepak_bola = [0]
+	prediksi_tenis_meja = [0]
+	prediksi_tolak_peluru = [0]
+
+	'''  =========================================method post====================================== '''
+	prediksi_post = ''
+	nama_siswa = ''
+	jenis_kelamin = ''
+	test = []
+	test_ = []
+	form = Fomrdata()
+	if request.method == 'POST':
+		form = Fomrdata(request.POST)
+		if form.is_valid():
+			dt = form .cleaned_data
+
+			lihat = {
+				'jenis_kelamin': [dt['jenis_kelamin']],
+				'tinggi_badan': [dt['tinggi_badan']],
+				'berat_badan': [dt['berat_badan']],
+
+				'kemampuan_fisik_lari': [dt['kemampuan_fisik_lari']],
+				'teknik_dasar_lari': [dt['teknik_dasar_lari']],
+
+				'kemampuan_fisik_voli': [dt['kemampuan_fisik_voli']],
+				'teknik_dasar_voli': [dt['teknik_dasar_voli']],
+
+				'kemampuan_fisik_renang': [dt['kemampuan_fisik_renang']],
+				'teknik_dasar_renang': [dt['teknik_dasar_renang']],
+
+				'kemampuan_fisik_bulu_tangkis': [dt['kemampuan_fisik_bulu_tangkis']],
+				'teknik_dasar_bulu_tangkis': [dt['teknik_dasar_bulu_tangkis']],
+
+				'kemampuan_fisik_sepak_bola': [dt['kemampuan_fisik_sepak_bola']],
+				'teknik_dasar_sepak_bola': [dt['teknik_dasar_sepak_bola']],
+
+				'kemampuan_fisik_tenis_meja': [dt['kemampuan_fisik_tenis_meja']],
+				'teknik_dasar_tenis_meja': [dt['teknik_dasar_tenis_meja']],
+
+				'kemampuan_fisik_tolak_peluru': [dt['kemampuan_fisik_tolak_peluru']],
+				'teknik_dasar_tolak_peluru': [dt['teknik_dasar_tolak_peluru']],
+			}
+
+
+			test = pd.DataFrame(lihat)
+			# test = konvers_train(test)
+
+			konversiberatbadantinggibadan = test.copy()
+			konversiberatbadantinggibadan = konversi_berat_badan_tinggi_badan_inputan(konversiberatbadantinggibadan)
+
+			test_ = test.copy()
+			test_ = konvers_ideal_post(test_)
+
+			nama_siswa = request.POST['nama_siswa']
+			jenis_kelamin = request.POST['jenis_kelamin']
+
+			
+			prediksi_lari= model_lari.predict(konversiberatbadantinggibadan[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_lari', 'teknik_dasar_lari']])
+			prediksi_voli= model_voli.predict(konversiberatbadantinggibadan[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_voli', 'teknik_dasar_voli']])
+			prediksi_renang= model_renang.predict(konversiberatbadantinggibadan[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_renang', 'teknik_dasar_renang']])
+			prediksi_bulu_tangkis= model_bulu_tangkis.predict(konversiberatbadantinggibadan[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_bulu_tangkis', 'teknik_dasar_bulu_tangkis']])
+			prediksi_sepak_bola= model_sepak_bola.predict(konversiberatbadantinggibadan[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_sepak_bola', 'teknik_dasar_sepak_bola']])
+			prediksi_tenis_meja= model_tenis_meja.predict(konversiberatbadantinggibadan[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_tenis_meja', 'teknik_dasar_tenis_meja']])
+			prediksi_tolak_peluru= model_tolak_peluru.predict(konversiberatbadantinggibadan[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_tolak_peluru', 'teknik_dasar_tolak_peluru']])
+			# prediksi_post = model.predict(test)
+	'''  =========================================end method post====================================== '''
+
+	'''  =========================================prediksi olahraga====================================== '''
+
+
+	'''  ========================================= end prediksi olahraga====================================== '''
+	
+	if jenis_kelamin == '0':
+		jenis_kelamin = "Perempuan"
+	else:
+		jenis_kelamin = "Laki - Laki"
+
+	'''  =========================================kirim nilai====================================== '''
+	# data_training_lari = x_train_lari.copy()
+	# data_training_lari.reset_index(inplace=True)
+
+	# file ini akan dikirim ke html (file ini digunakan sebagai data training ke 7 olahraga)
+	def kirimdatatraining(data_training, x_train):
+		datanya = x_train.copy()
+		datanya.reset_index(inplace=True)
+		return datanya
+
+	data_training_lari = kirimdatatraining(data_training_lari, x_train_lari)
+	data_training_renang = kirimdatatraining(data_training_renang, x_train_renang)
+	data_training_sepak_bola = kirimdatatraining(data_training_sepak_bola, x_train_sepak_bola)
+	data_training_tolak_peluru = kirimdatatraining(data_training_tolak_peluru, x_train_tolak_peluru)
+	data_training_bulu_tangkis = kirimdatatraining(data_training_bulu_tangkis, x_train_bulu_tangkis)
+	data_training_tenis_meja = kirimdatatraining(data_training_tenis_meja, x_train_tenis_meja)
+	data_training_voli = kirimdatatraining(data_training_voli, x_train_voli)
+	
+	
+
+	# data testing
+	data_testing_voli = kirimdatatraining(data_testing_voli, x_test_voli)
+	data_testing_lari = kirimdatatraining(data_training_lari, x_test_lari)
+	data_testing_renang = kirimdatatraining(data_training_renang, x_test_renang)
+	data_testing_sepak_bola = kirimdatatraining(data_training_sepak_bola, x_test_sepak_bola)
+	data_testing_tenis_meja = kirimdatatraining(data_training_tenis_meja, x_test_tenis_meja)
+	data_testing_bulu_tangkis = kirimdatatraining(data_training_bulu_tangkis, x_test_bulu_tangkis)
+	data_testing_tolak_peluru = kirimdatatraining(data_training_tolak_peluru, x_test_tolak_peluru)
+
+	
+
+	# data_training_renang.to_csv('data_training_renang.csv')
+	# data_training_tenis_meja.to_csv('data_training_tenis_meja.csv')
+	# data_training_tenis_meja.to_csv('data_training_tenis_meja.csv')
+	# data_training_bulu_tangkis.to_csv('data_training_bulu_tangkis.csv')
+	# data_training_tolak_peluru.to_csv('data_training_tolak_peluru.csv')
+	# data_training_sepak_bola.to_csv('data_training_sepak_bola.csv')
+
+	# pengujian
+
+	def lakukan_uji(data_aktual, modelnya):
+		dataku = data_aktual.values
+		data_mau_prediksi = dataku.reshape(-1,1)
+		data_aktual = data_aktual                                         # data yang sebenarnya
+		data_hasil_prediksi = modelnya.predict(data_mau_prediksi)		# data yang di prediksi dari data yang sebenarnya
+
+
+		precision = metrics.precision_score(data_aktual, data_hasil_prediksi, average='weighted')    # prcesion : (y_true, y_pred)
+		recall = metrics.recall_score(data_aktual, data_hasil_prediksi, average='weighted')
+		akurasi = metrics.accuracy_score(data_aktual, data_hasil_prediksi)
+		hasilnya = {
+			'precision': int(precision * 100),
+			'recall': int(recall * 100),
+			'akurasi': int(akurasi * 100)
+		}
+		# df = pd.DataFrame(hasilnya)
+
+		return hasilnya
+
+	hasil_uji_lari = lakukan_uji(y_test_lari, model_lari)
+	hasil_uji_renang = lakukan_uji(y_test_renang, model_renang)
+	hasil_uji_sepak_bola = lakukan_uji(y_test_sepak_bola, model_sepak_bola)
+	hasil_uji_tolak_peluru = lakukan_uji(y_test_tolak_peluru, model_tolak_peluru)
+	hasil_uji_tenis_meja = lakukan_uji(y_test_tenis_meja, model_tenis_meja)
+	hasil_uji_bulu_tangkis = lakukan_uji(y_test_bulu_tangkis, model_bulu_tangkis)
+	hasil_uji_voli = lakukan_uji(y_test_voli, model_voli)
+
+	print(hasil_uji_lari)
+	# print(hasil_uji_voli['precision'])
+
+	# dataku = y_test_voli.values
+	# data_mau_prediksi = dataku.reshape(-1,1)
+	# # print(dataku.reshape(-1,1).ndim)
+
+	# data_aktual_voli = y_test_voli                                         # data yang sebenarnya
+	# data_hasil_prediksi_voli = model_voli.predict(data_mau_prediksi)		# data yang di prediksi dari data yang sebenarnya
+
+
+	# precision_voli = metrics.precision_score(data_aktual_voli, data_hasil_prediksi_voli, average='weighted')    # prcesion : (y_true, y_pred)
+	# recall_voli = metrics.recall_score(data_aktual_voli, data_hasil_prediksi_voli, average='weighted')
+	# akurasi_voli = metrics.accuracy_score(data_aktual_voli, data_hasil_prediksi_voli)
+
+
+
+
+	context = {
+		'form' : form,
+		'test': test,
+		'nama_siswa': nama_siswa,
+		'jenis_kelamin': jenis_kelamin,
+
+		'prediksi_lari': prediksi_lari[0],
+		'prediksi_voli': prediksi_voli[0],
+		'prediksi_renang': prediksi_renang[0],
+		'prediksi_bulu_tangkis': prediksi_bulu_tangkis[0],
+		'prediksi_sepak_bola': prediksi_sepak_bola[0],
+		'prediksi_tenis_meja': prediksi_tenis_meja[0],
+		'prediksi_tolak_peluru': prediksi_tolak_peluru[0],
+		'data_training_lari': data_training_lari,
+		'data_training_voli': data_training_voli,
+		
+
+		'data_testing_voli': data_testing_voli,
+		'data_testing_tolak_peluru': data_testing_tolak_peluru,
+		'data_testing_lari': data_testing_lari,
+		'data_testing_renang': data_testing_renang,
+		'data_testing_sepak_bola': data_testing_sepak_bola,
+		'data_testing_tenis_meja': data_testing_tenis_meja,
+		'data_testing_bulu_tangkis': data_testing_bulu_tangkis,
+
+		# 'precision_voli': int(precision_voli * 100),
+		# 'recall_voli': int(recall_voli * 100),
+		# 'akurasi_voli': int(akurasi_voli * 100),
+
+
+		'hasil_uji_voli': hasil_uji_voli,
+		'hasil_uji_tenis_meja': hasil_uji_tenis_meja,
+		'hasil_uji_lari': hasil_uji_lari,
+		'hasil_uji_tolak_peluru': hasil_uji_tolak_peluru,
+		'hasil_uji_renang': hasil_uji_renang,
+		'hasil_uji_bulu_tangkis': hasil_uji_bulu_tangkis,
+		'hasil_uji_sepak_bola': hasil_uji_sepak_bola,
+
+
+
+
+		'data_training_renang': data_training_renang,
+		'data_training_sepak_bola': data_training_sepak_bola,
+		'data_training_tenis_meja': data_training_tenis_meja,
+		'data_training_tolak_peluru': data_training_tolak_peluru,
+		'data_training_bulu_tangkis': data_training_bulu_tangkis,
+
+		# 'xy_train' : xy_train,
+		# 'xy_train_' : xy_train_,
+		# 'idealnya' : idealnya,
+		# 'test_' : test_,
+		# 'prediksi_post' : prediksi_post,
+	}
+	'''  =========================================end kirim nilai====================================== '''
+
+	return render(request, 'myapp/laporan.html', context)
