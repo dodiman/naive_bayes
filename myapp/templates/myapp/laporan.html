@@ -1,5 +1,30 @@
 {% extends 'master.html' %}
 
+{% load static %}
+
+{% block style %}
+
+<style>
+	.jenis_huruf {
+		font-family: "Times New Roman", Times, serif;
+		font-size: 30px; 
+		padding-bottom: 0; 
+		margin-bottom: 0;
+	} 
+
+	.huruf_laporan {
+		font-family: "Times New Roman", Times, serif;
+	} 
+
+	.gambar: {
+		margin: 800;
+		padding: 800;
+	}
+
+</style>
+
+{% endblock %}
+
 {% block body %}
 <div class="container-fluid">
 	
@@ -17,24 +42,28 @@
               <!-- info row -->
               <div class="row invoice-info">
                 <div class="col-sm-2 invoice-col">
-                  <p>logo buton</p>
+                  <!-- <p>logo buton</p> -->
+                 <p>  </p> <img src="{% static 'image/logo_buton.png' %}" height="139" width="100">
                 </div>
                 <!-- /.col -->
-                <div class="col-sm-8 invoice-col">
-                  <center><strong><p style="font-size: 20px;">PEMERINTAH KABUPATEN BUTON<p></strong></center>
-                  <center><strong><p style="font-size: 20px;">DINAS PENDIDIKAN<p></strong></center>
-                  <center><strong><p style="font-size: 20px;">SMP NEGERI 3 PASARWAJO<p></strong></center>
+                <div class="col-sm-8 invoice-col" style="padding-bottom: 0; margin-bottom: 0;">
+                  <center><strong><p class="jenis_huruf" >PEMERINTAH KABUPATEN BUTON<p></strong></center>
+                  <center><strong><p class="jenis_huruf" style=" line-height: 0px;">DINAS PENDIDIKAN<p></strong></center>
+                  <center><strong><p class="jenis_huruf">SMP NEGERI 3 PASARWAJO<p></strong></center>
                   
                   <!-- <br /> -->
                   
                   <br />
-                  <center><p style="font-size: 12px;">Alamat : Jln Poros Pasarwajo Dongkala Telp. …… Kode Pos 93754</p></center>
+                  <center><p class="huruf_laporan" style="font-size: 20px;">Alamat : Jln Poros Pasarwajo Dongkala Telp. …… Kode Pos 93754</p></center>
 
                 </div>
                 
                 <!-- /.col -->
                 <div class="col-sm-2 invoice-col">
-                  <p> logo tutwuri handayani</p>
+                  <!-- <p> logo tutwuri handayani</p> -->
+
+                  <br />
+                  <img class="gambar" src="{% static 'image/logo_tutwuri.png' %}" height="123" width="125">
                 </div>
                 <!-- /.col -->
               </div>
@@ -63,21 +92,97 @@
                       <th>Jenis Kelamin</th>
                       <th>Tinggi Badan</th>
                       <th>Berat Badan</th>
+                      <th>Lari</th>
+                      <th>Voli</th>
+                      <th>Renang</th>
+                      <th>Tenis Meja</th>
+                      <th>Bulu Tangkis</th>
+                      <th>Tolak Peluru</th>
+                      <th>Sepak Bola</th>
+                      <th>Bakat Siswa (Nilai Tertinggi) </th>
                     </tr>
                     </thead>
                     <tbody>
                     
-                    {% for index, value in data_testing_lari.iterrows %}
+                    {% for index,value in digabungkan_dulu.iterrows %}
                     <tr>
                       <td>{{ forloop.counter }}</td>
-                      <td></td>
-                      <td>{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}</td>
+                      <td>{{ value.nama_siswa }}</td>
+                      <td>{{ value.jenis_kelamin|title }}</td>
                       <td>{{ value.tinggi_badan }}</td>
                       <td>{{ value.berat_badan }}</td>
+                      <td>
+                      	{% if value.lari == value.nilai_tertinggi %}
+                      	<i class="fas fa-check"></i>
+                      	{% else %}
+                      
+                      	<i class="fas fa-close"></i>
+
+                      	{% endif %}
+                      </td>
+                      <td>
+
+                      {% if value.voli == value.nilai_tertinggi %}
+                      	<i class="fas fa-check"></i>
+                      	{% else %}
+                      
+                      	<i class="fas fa-close"></i>
+
+                      	{% endif %}
+
+                  </td>
+                      <td>
+
+                      	{% if value.renang == value.nilai_tertinggi %}
+                      	<i class="fas fa-check"></i>
+                      	{% else %}
+                      
+                      	<i class="fas fa-close"></i>
+
+                      	{% endif %}
+
+                  </td>
+                      <td>
+                      	{% if value.tenis_meja == value.nilai_tertinggi %}
+                      	<i class="fas fa-check"></i>
+                      	{% else %}
+                      
+                      	<i class="fas fa-close"></i>
+
+                      	{% endif %}
+
+                      </td>
+                      <td>
+                      	{% if value.bulu_tangkis == value.nilai_tertinggi %}
+                      	<i class="fas fa-check"></i>
+                      	{% else %}
+                      
+                      	<i class="fas fa-close"></i>
+
+                      	{% endif %}
+
+                      </td>
+                      <td>
+                      	{% if value.tolak_peluru == value.nilai_tertinggi %}
+                      	<i class="fas fa-check"></i>
+                      	{% else %}
+                      
+                      	<i class="fas fa-close"></i>
+
+                      	{% endif %}
+
+                      </td>
+                      <td>
+                      	{% if value.sepak_bola == value.nilai_tertinggi %}
+                      	<i class="fas fa-check"></i>
+                      	{% else %}
+                      
+                      	<i class="fas fa-close"></i>
+
+                      	{% endif %}
+
+                      </td>
+                      <td>{{ value.bakat|title }}</td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -99,819 +204,7 @@
               </div>
             </div>
 	
-	<div class="row">
-		<div class="card">
-              <div class="card-header p-2">
-                <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Data Training Lari</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#voli" data-toggle="tab">Data Training Voli</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#renang" data-toggle="tab">Data Training Renang</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#bulutangkis" data-toggle="tab">Data Training Bulu Tangkis</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#sepakbola" data-toggle="tab">Data Training Sepak Bola</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#tenismeja" data-toggle="tab">Data Training Tenis Meja</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#tolakpeluru" data-toggle="tab">Data Training Tolak Peluru</a></li>
-                </ul>
-              </div><!-- /.card-header -->
-              <div class="card-body">
-                <div class="tab-content">
-                  <div class="active tab-pane" id="activity">
-                     <div class="card card-warning">
-				<div class="card-header">
-					<h3 class="card-title">Data Training Lari</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Lari</th>
-								<th>Teknik Dasar Lari</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_training_lari.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_lari }}</td>
-								<td>{{ value.teknik_dasar_lari }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-
-				<!-- ini untuk data testing -->
-			<div class="card card-secondary">
-				<div class="card-header">
-					<h3 class="card-title">Data Testing Lari</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Lari</th>
-								<th>Teknik Dasar Lari</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_testing_lari.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_lari }}</td>
-								<td>{{ value.teknik_dasar_lari }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-			<!-- end data testing -->
-
-
-
-                  </div>
-                  <!-- /.tab-pane -->
-                  <div class="tab-pane" id="voli">
-                    <!-- data training lari disini -->
-                    <div class="card card-warning">
-				<div class="card-header">
-					<h3 class="card-title">Data Training Voli</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Voli</th>
-								<th>Teknik Dasar Voli</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_training_voli.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_voli }}</td>
-								<td>{{ value.teknik_dasar_voli }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-
-			<!-- ini untuk data testing -->
-			<div class="card card-secondary">
-				<div class="card-header">
-					<h3 class="card-title">Data Testing Voli</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Voli</th>
-								<th>Teknik Dasar Voli</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_testing_voli.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_voli }}</td>
-								<td>{{ value.teknik_dasar_voli }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-			<!-- end data testing -->
-
-                  </div>
-                  <!-- /.tab-pane -->
-
-                  <div class="tab-pane" id="renang">
-                     <!-- data training lari disini -->
-                    <div class="card card-warning">
-				<div class="card-header">
-					<h3 class="card-title">Data Training Renang</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Renang</th>
-								<th>Teknik Dasar Renang</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_training_renang.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_renang }}</td>
-								<td>{{ value.teknik_dasar_renang }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-
-				<!-- ini untuk data testing -->
-			<div class="card card-secondary">
-				<div class="card-header">
-					<h3 class="card-title">Data Testing Renang</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Renang</th>
-								<th>Teknik Dasar Renang</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_testing_renang.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_renang }}</td>
-								<td>{{ value.teknik_dasar_renang }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-			<!-- end data testing -->
-
-                  </div>
-                  <!-- /.tab-pane -->
-
-                  <div class="tab-pane" id="bulutangkis">
-                     <!-- data training lari disini -->
-                    <div class="card card-warning">
-				<div class="card-header">
-					<h3 class="card-title">Data Training Bulu Tangkis</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Bulu Tangkis</th>
-								<th>Teknik Dasar Bulu Tangkis</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_training_bulu_tangkis.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_bulu_tangkis }}</td>
-								<td>{{ value.teknik_dasar_bulu_tangkis }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-
-				<!-- ini untuk data testing -->
-			<div class="card card-secondary">
-				<div class="card-header">
-					<h3 class="card-title">Data Testing Bulu Tangkis</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Bulu Tangkis</th>
-								<th>Teknik Dasar Bulu Tangkis</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_testing_bulu_tangkis.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_bulu_tangkis }}</td>
-								<td>{{ value.teknik_dasar_bulu_tangkis }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-			<!-- end data testing -->
-
-                  </div>
-                  <!-- /.tab-pane -->
-
-                  <div class="tab-pane" id="sepakbola">
-                     <!-- data training lari disini -->
-                    <div class="card card-warning">
-				<div class="card-header">
-					<h3 class="card-title">Data Training Sepak Bola</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Sepak Bola</th>
-								<th>Teknik Dasar Sepak Bola</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_training_sepak_bola.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_sepak_bola }}</td>
-								<td>{{ value.teknik_dasar_sepak_bola }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-
-				<!-- ini untuk data testing -->
-			<div class="card card-secondary">
-				<div class="card-header">
-					<h3 class="card-title">Data Testing Sepak Bola</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Sepak Bola</th>
-								<th>Teknik Dasar Sepak Bola</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_testing_sepak_bola.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_sepak_bola }}</td>
-								<td>{{ value.teknik_dasar_sepak_bola }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-			<!-- end data testing -->
-
-                  </div>
-                  <!-- /.tab-pane -->
-
-                  <div class="tab-pane" id="tenismeja">
-                     <!-- data training lari disini -->
-                    <div class="card card-warning">
-				<div class="card-header">
-					<h3 class="card-title">Data Training Tenis Meja</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Tenis Meja</th>
-								<th>Teknik Dasar Tenis Meja</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_training_tenis_meja.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_tenis_meja }}</td>
-								<td>{{ value.teknik_dasar_tenis_meja }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-
-			<!-- ini untuk data testing -->
-			<div class="card card-secondary">
-				<div class="card-header">
-					<h3 class="card-title">Data Testing Tenis Meja</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Tenis Meja</th>
-								<th>Teknik Dasar Tenis Meja</th>
-
-							</tr>
-						</thead>
-						<tbody>
-
-							{% for index, value in data_testing_tenis_meja.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_tenis_meja }}</td>
-								<td>{{ value.teknik_dasar_tenis_meja }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-			<!-- end data testing -->
-
-
-                  </div>
-                  <!-- /.tab-pane -->
-
-                  <div class="tab-pane" id="tolakpeluru">
-                     <!-- data training lari disini -->
-                    <div class="card card-warning">
-				<div class="card-header">
-					<h3 class="card-title">Data Training Tolak Peluru</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Tolak Peluru</th>
-								<th>Teknik Dasar Tolak Peluru</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_training_tolak_peluru.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_tolak_peluru }}</td>
-								<td>{{ value.teknik_dasar_tolak_peluru }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-
-				<!-- ini untuk data testing -->
-			<div class="card card-secondary">
-				<div class="card-header">
-					<h3 class="card-title">Data Testing Tolak Peluru</h3>
-				</div>
-				<!-- /.card-header -->
-				<div class="card-body table-responsive p-0" style="height: 500px;">
-					<table class="table table-head-fixed text-nowrap">
-						<thead>
-							<tr>
-								<th>Nomor</th>
-								<th>Jenis Kelamin</th>
-								<th>Tinggi Badan</th>
-								<th>Berat Badan</th>
-								<th>Kemampuan Fisik Tolak Peluru</th>
-								<th>Teknik Dasar Tolak Peluru</th>
-
-							</tr>
-						</thead>
-						<tbody>
-							{% for index, value in data_testing_tolak_peluru.iterrows %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td>
-									{% if value.jenis_kelamin == 1 %} 
-										Laki - Laki
-									{% else %}
-										Perempuan 
-									{% endif %}
-								 </td>
-								<td>
-									{% if value.tinggi_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								<td>
-									{% if value.berat_badan == 1 %} 
-										Ideal
-									{% else %}
-										Tidak Ideal 
-									{% endif %}
-								
-							</td>
-								<td>{{ value.kemampuan_fisik_tolak_peluru }}</td>
-								<td>{{ value.teknik_dasar_tolak_peluru }}</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-				<!-- /.card-body -->
-			</div>
-			<!-- end data testing -->
-
-
-                  </div>
-                  <!-- /.tab-pane -->
-                </div>
-                <!-- /.tab-content -->
-              </div><!-- /.card-body -->
-            </div>
-	</div>
+	
 	
 	
 	

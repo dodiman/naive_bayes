@@ -22,6 +22,7 @@
     <!-- DESKRIPSI UNTUK KELAS AKTIF  -->
     {% url 'dashboard' as dashboard %}
     {% url 'datas' as datas %}
+    {% url 'data_siswa' as data_siswa %}
     {% url 'laporan' as laporan %}
    
 
@@ -54,6 +55,19 @@
                  <i class="nav-icon fas fa-database"></i>
                  <p>
                   Data
+                 </p>
+               </a>
+             </li>
+
+             <li class="nav-item">
+               <a href="{% url 'data_siswa' %}" class="nav-link
+                {% if request.path == data_siswa %} 
+               active
+               {% endif %}
+               ">
+                 <i class="nav-icon fas fa-database"></i>
+                 <p>
+                  Data Siswa
                  </p>
                </a>
              </li>

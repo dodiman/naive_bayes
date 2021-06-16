@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import Fomrdata
 
-from myapp.models import Datas
+from myapp.models import Datas, DataSiswa
 
 import numpy as np
 import pandas as pd
@@ -21,10 +21,39 @@ from mixed_naive_bayes import MixedNB
 
 # untuk import export
 from import_export import resources
-from .resources import DatasResources
+from .resources import DatasResources, DataSiswaResources
 from tablib import Dataset
 
 from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def data_siswa(request):
+	pesan = ''
+	db = DataSiswa.objects.all()
+	if request.method == 'POST':
+		file_format = request.POST['file-format']
+		employee_resource = DataSiswaResources()
+		dataset = Dataset()
+		new_employees = request.FILES['importData']
+
+		# print(len(new_employees.read()))
+		imported_data = dataset.load(new_employees.read().decode('utf-8'),format='csv')
+		result = employee_resource.import_data(dataset, dry_run=True)   # datanya di test
+
+		# if file_format == 'CSV':
+		if not result.has_errors():
+			employee_resource.import_data(dataset, dry_run=False)
+
+			pesan = 'sukses'
+
+
+	context = {
+		'db': db,
+		'pesan' : pesan,
+		# 'data_resource'	: data_resource,
+	}
+	return render(request, 'myapp/data_siswa.html', context)
 
 @login_required
 def datas(request):
@@ -567,7 +596,7 @@ def dashboard3(request):
 	# test[['ipk','ipk_prodi','ipk1','ipk2','ipk3','ipk4','ipk4','ipk5','ipk6','sam_bekerja','p_mengulang', 'p_cuti', 'a_papua']] = np.where(test[['ipk','ipk_prodi','ipk1','ipk2','ipk3','ipk4','ipk4','ipk5','ipk6','sam_bekerja','p_mengulang', 'p_cuti', 'a_papua']] == 0, ' ', ' ')	# 2 kondisi ya/tidak
 
 	data_input = request.POST
-	print(data_input)
+	
 
 	context = {
 		'gabung': gabung,
@@ -950,17 +979,29 @@ def reset_data(request):
 	Datas.objects.all().delete()
 	return redirect('datas')
 
+def reset_data_siswa(request):
+	DataSiswa.objects.all().delete()
+	return redirect('data_siswa')
+
 
 # ini untuk halaman laporan
 def laporan(request):
 	db = Datas.objects.all()
+	data_siswa = DataSiswa.objects.all()
+
 	if not db:
 		return redirect('datas')
 	csv = pd.DataFrame(db.values())
+	csv2 = pd.DataFrame(data_siswa.values())
+	csv3 = pd.DataFrame(data_siswa.values())
 	df = pd.DataFrame(db.values())
+	df2 = pd.DataFrame(data_siswa.values())
 	csv = df.copy()
+	csv2 = df2.copy()
 
 	labeling = csv.copy()
+	labeling2 = csv2.copy()
+	
 	
 	# ini untuk tabel laporan
 	data_laporan = csv.copy()
@@ -968,7 +1009,8 @@ def laporan(request):
 	data_laporan_tampil = data_laporan[['nama_siswa', 'jenis_kelamin', 'tinggi_badan', 'berat_badan']]
 	data_laporan_tampil['hasil_bakat'] = ''
 
-	print(data_laporan_tampil)
+
+
 	
 	def konvers(csv):
 		csv[['jenis_kelamin']] = np.where(csv[['jenis_kelamin']] == 'perempuan', 0, 1)
@@ -1080,8 +1122,15 @@ def laporan(request):
 		# csv.iloc[:,2] = np.select(kondisi_berat_badan, pilihan, default=1)
 		return csv
 	
+	
 	'''  ========================================= pembagian data====================================== '''
+	
+	
+
 	labeling = konvers(csv)
+	labeling2 = konvers(csv2)
+
+
 	data_training_lari = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_lari', 'teknik_dasar_lari', 'hasil_bakat_lari']]
 	data_training_voli = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_voli', 'teknik_dasar_voli', 'hasil_bakat_voli']]
 	
@@ -1096,7 +1145,24 @@ def laporan(request):
 	data_training_tolak_peluru = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_tolak_peluru', 'teknik_dasar_tolak_peluru', 'hasil_bakat_tolak_peluru']]
 
 
+
+	data_training_lari2 = labeling2[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_lari', 'teknik_dasar_lari']]
+
+	data_training_voli2 = labeling2[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_voli', 'teknik_dasar_voli']]
+
+	data_training_renang2 = labeling2[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_renang', 'teknik_dasar_renang']]
+
+	data_training_bulu_tangkis2 = labeling2[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_bulu_tangkis', 'teknik_dasar_bulu_tangkis']]
+
+	data_training_sepak_bola2 = labeling2[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_sepak_bola', 'teknik_dasar_sepak_bola']]
+
+	data_training_tenis_meja2 = labeling2[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_tenis_meja', 'teknik_dasar_tenis_meja']]
+
+	data_training_tolak_peluru2 = labeling2[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_tolak_peluru', 'teknik_dasar_tolak_peluru']]
+
+
 	# data testing
+	
 	# data_training_voli = labeling[['jenis_kelamin', 'tinggi_badan', 'berat_badan', 'kemampuan_fisik_voli', 'teknik_dasar_voli', 'hasil_bakat_voli']]
 
 	'''  =========================================end pembagian data====================================== '''
@@ -1154,6 +1220,46 @@ def laporan(request):
 	model_tolak_peluru = GaussianNB()
 	model_tolak_peluru.fit(x_train_tolak_peluru, y_train_tolak_peluru)
 
+
+	# data untuk prediksi banyak data
+	prediksi_siswa_lari = model_lari.predict(data_training_lari2)
+	prediksi_siswa_voli = model_lari.predict(data_training_voli2)
+	prediksi_siswa_renang = model_lari.predict(data_training_renang2)
+	prediksi_siswa_sepak_bola = model_lari.predict(data_training_sepak_bola2)
+	prediksi_siswa_tolak_peluru = model_lari.predict(data_training_tolak_peluru2)
+	prediksi_siswa_tenis_meja = model_lari.predict(data_training_tenis_meja2)
+	prediksi_siswa_bulu_tangkis = model_lari.predict(data_training_bulu_tangkis2)
+
+	# print(csv2['id'])
+	# print(labeling2['id'])
+	# print(data_training_lari2)
+	# print(prediksi_siswa_lari)
+	# print(prediksi_siswa_lari.ndim)
+	# print(type(prediksi_siswa_lari))
+
+	# data dikumpul jadi satu
+	data_kumpul = csv3.copy()
+
+	data_kumpul = data_kumpul[['nama_siswa', 'jenis_kelamin', 'tinggi_badan', 'berat_badan']]
+	kumpulan_hasil = pd.DataFrame({
+		'lari': prediksi_siswa_lari,
+		'sepak_bola': prediksi_siswa_sepak_bola,
+		'voli': prediksi_siswa_voli,
+		'renang': prediksi_siswa_renang,
+		'tenis_meja': prediksi_siswa_tenis_meja,
+		'bulu_tangkis': prediksi_siswa_bulu_tangkis,
+		'tolak_peluru': prediksi_siswa_tolak_peluru,
+	})
+	kumpulan_hasil = kumpulan_hasil.astype('int32')
+	digabungkan_dulu = data_kumpul.join(kumpulan_hasil)
+
+	digabungkan_dulu['nilai_tertinggi'] = kumpulan_hasil.max(axis=1)
+	digabungkan_dulu.nilai_tertinggi = digabungkan_dulu.nilai_tertinggi.astype('int')
+	digabungkan_dulu['bakat'] = kumpulan_hasil.idxmax(axis=1)
+
+	print(kumpulan_hasil.idxmax(axis=1))
+
+	
 	'''  =========================================end algoritma naivebayes====================================== '''
 	
 
@@ -1172,6 +1278,9 @@ def laporan(request):
 	test = []
 	test_ = []
 	form = Fomrdata()
+
+	# prediksi data dalam ukuran banyak
+
 	if request.method == 'POST':
 		form = Fomrdata(request.POST)
 		if form.is_valid():
@@ -1268,6 +1377,10 @@ def laporan(request):
 	data_testing_tolak_peluru = kirimdatatraining(data_training_tolak_peluru, x_test_tolak_peluru)
 
 	
+	# hasil prediksi data ukuran banyak
+	bakat_voli_siswa = data_testing_voli
+	# print(data_testing_voli)
+	# print(data_)
 
 	# data_training_renang.to_csv('data_training_renang.csv')
 	# data_training_tenis_meja.to_csv('data_training_tenis_meja.csv')
@@ -1305,7 +1418,7 @@ def laporan(request):
 	hasil_uji_bulu_tangkis = lakukan_uji(y_test_bulu_tangkis, model_bulu_tangkis)
 	hasil_uji_voli = lakukan_uji(y_test_voli, model_voli)
 
-	print(hasil_uji_lari)
+	# print(hasil_uji_lari)
 	# print(hasil_uji_voli['precision'])
 
 	# dataku = y_test_voli.values
@@ -1319,7 +1432,6 @@ def laporan(request):
 	# precision_voli = metrics.precision_score(data_aktual_voli, data_hasil_prediksi_voli, average='weighted')    # prcesion : (y_true, y_pred)
 	# recall_voli = metrics.recall_score(data_aktual_voli, data_hasil_prediksi_voli, average='weighted')
 	# akurasi_voli = metrics.accuracy_score(data_aktual_voli, data_hasil_prediksi_voli)
-
 
 
 
@@ -1369,6 +1481,8 @@ def laporan(request):
 		'data_training_tenis_meja': data_training_tenis_meja,
 		'data_training_tolak_peluru': data_training_tolak_peluru,
 		'data_training_bulu_tangkis': data_training_bulu_tangkis,
+		'data_siswa': data_siswa,
+		'digabungkan_dulu' : digabungkan_dulu,
 
 		# 'xy_train' : xy_train,
 		# 'xy_train_' : xy_train_,
