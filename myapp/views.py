@@ -1257,7 +1257,12 @@ def laporan(request):
 	digabungkan_dulu.nilai_tertinggi = digabungkan_dulu.nilai_tertinggi.astype('int')
 	digabungkan_dulu['bakat'] = kumpulan_hasil.idxmax(axis=1)
 
-	print(kumpulan_hasil.idxmax(axis=1))
+	digabungkan_dulu['bakat_siswa'] = kumpulan_hasil.apply(lambda x: x[x == (x.max())].index.values, axis=1)
+
+	# print(kumpulan_hasil.apply(lambda x: x[x == (x.max())].index.values, axis=1))
+
+	# print(kumpulan_hasil.idxmax(axis=1))
+	# print(kumpulan_hasil.idxmax(axis=1))
 
 	
 	'''  =========================================end algoritma naivebayes====================================== '''

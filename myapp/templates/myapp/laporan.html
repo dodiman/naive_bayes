@@ -92,13 +92,7 @@
                       <th>Jenis Kelamin</th>
                       <th>Tinggi Badan</th>
                       <th>Berat Badan</th>
-                      <th>Lari</th>
-                      <th>Voli</th>
-                      <th>Renang</th>
-                      <th>Tenis Meja</th>
-                      <th>Bulu Tangkis</th>
-                      <th>Tolak Peluru</th>
-                      <th>Sepak Bola</th>
+                      
                       <th>Bakat Siswa (Nilai Tertinggi) </th>
                     </tr>
                     </thead>
@@ -111,78 +105,12 @@
                       <td>{{ value.jenis_kelamin|title }}</td>
                       <td>{{ value.tinggi_badan }}</td>
                       <td>{{ value.berat_badan }}</td>
-                      <td>
-                      	{% if value.lari == value.nilai_tertinggi %}
-                      	<i class="fas fa-check"></i>
-                      	{% else %}
                       
-                      	<i class="fas fa-close"></i>
-
-                      	{% endif %}
+                      <td>
+                        {% for va in value.bakat_siswa %}
+                          <span class="btn btn-outline-primary btn-md">{{ va|title }}</span>
+                        {% endfor %}
                       </td>
-                      <td>
-
-                      {% if value.voli == value.nilai_tertinggi %}
-                      	<i class="fas fa-check"></i>
-                      	{% else %}
-                      
-                      	<i class="fas fa-close"></i>
-
-                      	{% endif %}
-
-                  </td>
-                      <td>
-
-                      	{% if value.renang == value.nilai_tertinggi %}
-                      	<i class="fas fa-check"></i>
-                      	{% else %}
-                      
-                      	<i class="fas fa-close"></i>
-
-                      	{% endif %}
-
-                  </td>
-                      <td>
-                      	{% if value.tenis_meja == value.nilai_tertinggi %}
-                      	<i class="fas fa-check"></i>
-                      	{% else %}
-                      
-                      	<i class="fas fa-close"></i>
-
-                      	{% endif %}
-
-                      </td>
-                      <td>
-                      	{% if value.bulu_tangkis == value.nilai_tertinggi %}
-                      	<i class="fas fa-check"></i>
-                      	{% else %}
-                      
-                      	<i class="fas fa-close"></i>
-
-                      	{% endif %}
-
-                      </td>
-                      <td>
-                      	{% if value.tolak_peluru == value.nilai_tertinggi %}
-                      	<i class="fas fa-check"></i>
-                      	{% else %}
-                      
-                      	<i class="fas fa-close"></i>
-
-                      	{% endif %}
-
-                      </td>
-                      <td>
-                      	{% if value.sepak_bola == value.nilai_tertinggi %}
-                      	<i class="fas fa-check"></i>
-                      	{% else %}
-                      
-                      	<i class="fas fa-close"></i>
-
-                      	{% endif %}
-
-                      </td>
-                      <td>{{ value.bakat|title }}</td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -198,7 +126,7 @@
               <!-- this row will not appear when printing -->
               <div class="row no-print">
                 <div class="col-12">
-                  <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
+                  <a href="#" target="_blank" class="btn btn-default" onclick="window.print()"><i class="fas fa-print"></i> Print</a>
                   
                 </div>
               </div>
